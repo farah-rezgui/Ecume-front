@@ -54,7 +54,7 @@ export const chartsConfig = {
     opacity: 0.8,
   },
   tooltip: {
-    theme: "dark",
+    theme: "light",
   },
 };
 

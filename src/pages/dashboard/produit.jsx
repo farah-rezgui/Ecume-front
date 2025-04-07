@@ -17,21 +17,20 @@ export function Produit() {
     useEffect(() => {
     const fetchProduits = async () => {
         try {
-        const response = await axios.get("http://localhost:5000/prod/getAllProduit");
-        if (!response.ok) {
-            throw new Error("Erreur lors de la récupération des produits");
-          }
-          const data = await response.json();
-          setProduits(data.produitList);
+            const response = await axios.get("http://localhost:5000/prod/getAllProduit");
+            if(response.status===200){
+                setProduits(response.data.produitList);
+            }
         } catch (err) {
         setError(err.message);
         } finally {
         setLoading(false);
         }
     };
-  
+
     fetchProduits();
-    }, []);
+    }, []); 
+    console.log(produits);
 
     if (loading) return <div>Chargement en cours...</div>;
     if (error) return <div>Erreur: {error}</div>;

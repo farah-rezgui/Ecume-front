@@ -178,7 +178,7 @@ return (
                     <div className="flex flex-col">
                         {commande.products?.map((product, index) => (
                         <Typography key={index} className="text-xs font-normal text-blue-gray-500">
-                            {product.quantity}x {product.name || `Produit ${product.productId?.slice(-4) || index+1}`}
+                            {product.quantity}x {product.titre || `Produit ${product.productId?.slice(-4) || index+1}`}
                         </Typography>
                         )) || '-'}
                     </div>

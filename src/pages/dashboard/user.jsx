@@ -125,9 +125,9 @@ export default function User() {
                 );
               })}
             </tbody>
-          </table>
+        </table>
         </CardBody>
-      </Card>
+    </Card>
     </div>
-  );
+);
 }

@@ -8,12 +8,14 @@ import {
   ShoppingCartIcon,       // Pour Produit
   UsersIcon,              // Pour Client
   ClipboardDocumentIcon,
+  PlusCircleIcon,
 } from "@heroicons/react/24/solid";
 import { Home } from "@/pages/dashboard";
 import { SignIn, SignUp } from "@/pages/auth";
 import Produit from "./pages/dashboard/produit";
 import User from "./pages/dashboard/user";
 import Commande from "./pages/dashboard/commande";
+import AjouterProduit from "./pages/dashboard/AjouterProduit";
 
 const icon = {
   className: "w-5 h-5 text-inherit",
@@ -34,6 +36,12 @@ export const routes = [
         name: "produit",
         path: "/produit",
         element: <Produit />,
+      },
+      {
+        icon: <PlusCircleIcon {...icon} />,
+        name: "ajouter produit",
+        path: "/AjouterProduit",
+        element: <AjouterProduit />,
       },
       {
         icon: <UserCircleIcon {...icon} />,

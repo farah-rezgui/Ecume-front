@@ -38,12 +38,6 @@ export const routes = [
         element: <Produit />,
       },
       {
-        icon: <PlusCircleIcon {...icon} />,
-        name: "ajouter produit",
-        path: "/AjouterProduit",
-        element: <AjouterProduit />,
-      },
-      {
         icon: <UserCircleIcon {...icon} />,
         name: "user",
         path: "/user",

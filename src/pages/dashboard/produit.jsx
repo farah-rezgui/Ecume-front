@@ -5,17 +5,26 @@ import {
     Typography,
     Avatar,
     Button,
+    Dialog,
+    DialogHeader,
+    DialogBody,
+    DialogFooter,
 } from "@material-tailwind/react";
 import { EllipsisVerticalIcon } from "@heroicons/react/24/outline";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import  AjouterProduit from "./AjouterProduit";
 import { useNavigate } from "react-router-dom";
 
 export function Produit() {
     const [produits, setProduits] = useState([]);
+    const [open , setOpen] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const navigate = useNavigate();
+    const handleOpen = () => setOpen(!open);
+
+    
 
     useEffect(() => {
         const fetchProduits = async () => {
@@ -48,12 +57,22 @@ export function Produit() {
                     <Button 
                         color="white" 
                         size="sm"
-                        onClick={() => navigate('/dashboard/AjouterProduit')}
+                        onClick={() => handleOpen()}
                     >
                         Ajouter un produit
                     </Button>
                 </CardHeader>
                 <CardBody className="overflow-x-scroll px-0 pt-0 pb-2">
+                    <dialog
+                    open={open} 
+                    size={"xl"}
+                    handler={handleOpen}>
+                        <DialogHeader>
+                        </DialogHeader> 
+                        <DialogBody>
+                            <AjouterProduit handleOpen = {handleOpen}/>
+                        </DialogBody>
+                        </dialog>
                     <table className="w-full min-w-[640px] table-auto">
                         <thead>
                             <tr>

@@ -135,12 +135,12 @@ export default function AjouterProduit() {
     } catch (err) {
       console.error('Erreur:', err);
       const errorMessage = err.response?.data?.message || 
-                         err.response?.data?.error || 
-                         err.message;
+                        err.response?.data?.error || 
+                        err.message;
       setError(errorMessage || 'Erreur lors de l\'ajout du produit');
     } finally {
-      setLoading(false);
-      setShowModal(false);
+      const navigate = useNavigate();
+      navigate('/dashboard/produit')
     }
   };
 

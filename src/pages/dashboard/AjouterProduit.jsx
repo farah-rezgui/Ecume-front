@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useRef } from 'react';
 import {
   Card,
   CardHeader,
@@ -13,7 +13,13 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 
-export default function AjouterProduit({handleOpen , fetchProduits }) {
+export default function AjouterProduit({ handleOpen, fetchProduits }) {
+  const fileInputRef = useRef(null);
+
+  const handleButtonClick = () => {
+    fileInputRef.current.click();
+  };
+
   const [formData, setFormData] = useState({
     titre: '',
     description: '',
@@ -53,7 +59,6 @@ export default function AjouterProduit({handleOpen , fetchProduits }) {
     setLoading(true);
     setError('');
     setSuccess(false);
-
     const form = new FormData();
     form.append('titre', formData.titre);
     form.append('description', formData.description);
@@ -176,6 +181,8 @@ export default function AjouterProduit({handleOpen , fetchProduits }) {
                   accept="image/jpeg,image/png,image/gif"
                   onChange={handleImageUpload}
                   className="hidden"
+                  ref={fileInputRef}
+
                 />
                 <label htmlFor="image-upload">
                   <Button
@@ -183,7 +190,7 @@ export default function AjouterProduit({handleOpen , fetchProduits }) {
                     color="gray"
                     size="sm"
                     className="cursor-pointer"
-                  >
+                    onClick={handleButtonClick}                  >
                     Sélectionner des fichiers
                   </Button>
                 </label>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Card,
+Card,
   CardHeader,
   CardBody,
   Typography,
@@ -12,8 +12,9 @@ import {
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 
-export default function ModifierProduit({ handleOpenAdd , fetchProduits }) {
-  const { id } = useParams();
+export default function ModifierProduit({ handleOpenAdd , fetchProduits , produit }) {
+  const { _id } = produit;
+  console.log(produit);
   const [formData, setFormData] = useState({
     titre: '',
     description: '',
@@ -32,7 +33,7 @@ export default function ModifierProduit({ handleOpenAdd , fetchProduits }) {
   useEffect(() => {
     const fetchProduit = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/prod/getProduitById/${id}`);
+        const response = await axios.get(`http://localhost:5000/prod/getProduitById/${_id}`);
         if (response.status === 200) {
           setFormData({
             titre: response.data.titre,
@@ -48,7 +49,7 @@ export default function ModifierProduit({ handleOpenAdd , fetchProduits }) {
     };
 
     fetchProduit();
-  }, [id]);
+  }, [_id]);
 
   const handleImageUpload = (e) => {
     const files = Array.from(e.target.files);
@@ -219,14 +220,14 @@ export default function ModifierProduit({ handleOpenAdd , fetchProduits }) {
                 )}
 
                 <Typography variant="small" className="mb-4">
-                  {formData.newImages.length > 0 ? 'Nouvelles images sélectionnées' : 'Télécharger de nouvelles images'}
+                {formData.newImages.length > 0 ? 'Nouvelles images sélectionnées' : 'Télécharger de nouvelles images'}
                 </Typography>
                 <Typography variant="small" className="text-gray-600 mb-4">
-                  JPG, PNG ou GIF. Taille max 50MB.
+                JPG, PNG ou GIF. Taille max 50MB.
                 </Typography>
                 <input
-                  type="file"
-                  id="image-upload"
+                type="file"
+                id="image-upload"
                   multiple
                   accept="image/jpeg,image/png,image/gif"
                   onChange={handleImageUpload}
@@ -278,13 +279,13 @@ export default function ModifierProduit({ handleOpenAdd , fetchProduits }) {
                 type="submit"
                 color="gray"
                 disabled={loading}
-              >
+            >
                 {loading ? 'En cours...' : 'Enregistrer les modifications'}
-              </Button>
+            </Button>
             </div>
-          </form>
+        </form>
         </CardBody>
-      </Card>
+    </Card>
     </div>
-  );
+);
 }

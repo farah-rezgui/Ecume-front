@@ -65,7 +65,7 @@ export function Produit() {
     return (
         <div className="mt-12 mb-8 flex flex-col gap-12 overflow-x-scroll">
             {/* Dialogue pour ajouter un produit */}
-            <Dialog open={openAdd} handler={handleOpenAdd} size="md">
+            <Dialog open={openAdd} handler={handleOpenAdd} size="sm">
                 <DialogHeader>Ajouter un nouveau produit</DialogHeader>
                 <DialogBody>
                 <AjouterProduit handleOpen={handleOpenAdd} fetchProduits={fetchProduits} />
@@ -73,7 +73,7 @@ export function Produit() {
             </Dialog>
 
             {/* Dialogue pour modifier un produit */}
-            <Dialog open={openEdit} handler={handleOpenEdit} size="md">
+            <Dialog open={openEdit} handler={handleOpenEdit} size="sm">
                 <DialogHeader>Modifier le produit</DialogHeader>
                 <DialogBody>
                     {selectedProduit && (

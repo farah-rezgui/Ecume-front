@@ -31,23 +31,33 @@ export function Produit() {
         setSelectedProduit(produit);
         setOpenEdit(!openEdit);
     };
+    const handleDelete = async (id) => {
+        try {
+            await axios.delete(`http://localhost:5000/prod/deleteProduit/${id}`);
+            fetchProduits(); // Rafraîchir la liste
+        } catch (error) {
+            console.error("Erreur lors de la suppression :", error);
+        }
+    };
+    
 
-    useEffect(() => {
-        const fetchProduits = async () => {
-            try {
-                const response = await axios.get("http://localhost:5000/prod/getAllProduit");
-                if(response.status === 200){
-                    setProduits(response.data.produitList);
-                }
-            } catch (err) {
-                setError(err.message);
-            } finally {
-                setLoading(false);
+    const fetchProduits = async () => {
+        try {
+            const response = await axios.get("http://localhost:5000/prod/getAllProduit");
+            if(response.status === 200){
+                setProduits(response.data.produitList);
             }
-        };
-
+        } catch (err) {
+            setError(err.message);
+        } finally {
+            setLoading(false);
+        }
+    };
+    
+    useEffect(() => {
         fetchProduits();
     }, []);
+    
 
     if (loading) return <div>Chargement en cours...</div>;
     if (error) return <div>Erreur: {error}</div>;
@@ -58,7 +68,7 @@ export function Produit() {
             <Dialog open={openAdd} handler={handleOpenAdd} size="md">
                 <DialogHeader>Ajouter un nouveau produit</DialogHeader>
                 <DialogBody>
-                    <AjouterProduit handleOpen={handleOpenAdd} />
+                <AjouterProduit handleOpen={handleOpenAdd} fetchProduits={fetchProduits} />
                 </DialogBody>
             </Dialog>
 
@@ -67,10 +77,8 @@ export function Produit() {
                 <DialogHeader>Modifier le produit</DialogHeader>
                 <DialogBody>
                     {selectedProduit && (
-                        <ModifierProduit 
-                            handleOpen={handleOpenEdit} 
-                            produit={selectedProduit} 
-                        />
+<ModifierProduit handleOpen={handleOpenEdit} produit={selectedProduit} fetchProduits={fetchProduits} />
+
                     )}
                 </DialogBody>
             </Dialog>
@@ -148,7 +156,8 @@ export function Produit() {
                                                 color="red"
                                                 size="sm"
                                                 className="text-xs font-semibold hover:text-red-500"
-                                            >
+                                                onClick={() => handleDelete(produit._id)}
+                                                    >
                                                 Supprimer
                                             </Button>
                                         </div>

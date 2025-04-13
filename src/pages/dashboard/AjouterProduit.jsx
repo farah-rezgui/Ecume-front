@@ -13,7 +13,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 
-export default function AjouterProduit({handleOpen}) {
+export default function AjouterProduit({handleOpen , fetchProduits }) {
   const [formData, setFormData] = useState({
     titre: '',
     description: '',
@@ -52,13 +52,27 @@ export default function AjouterProduit({handleOpen}) {
     e.preventDefault();
     setLoading(true);
     setError('');
-    
+    setSuccess(false);
+
+    const form = new FormData();
+    form.append('titre', formData.titre);
+    form.append('description', formData.description);
+    form.append('prix', formData.prix);
+    form.append('quantityStock', formData.quantityStock);
+    formData.images.forEach((imgObj) => {
+        form.append('images', imgObj.file);
+    });
+
     try {
-      const response = await axios.post('http://localhost:5000/prod/addProduit', formData);
-      
+      const response = await axios.post('http://localhost:5000/prod/addProduit', form, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
       if (response.status === 200) {
         setSuccess(true);
         handleOpen();
+        if (typeof fetchProduits === "function") fetchProduits(); 
       }
     } catch (err) {
       setError(err.response?.data?.message || 'Erreur lors de l\'ajout du produit');

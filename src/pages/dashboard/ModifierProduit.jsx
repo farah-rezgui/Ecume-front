@@ -12,7 +12,7 @@ import {
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 
-export default function ModifierProduit({ handleOpenAdd }) {
+export default function ModifierProduit({ handleOpenAdd , fetchProduits }) {
   const { id } = useParams();
   const [formData, setFormData] = useState({
     titre: '',

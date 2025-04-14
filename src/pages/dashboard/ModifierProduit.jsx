@@ -96,16 +96,16 @@ export default function ModifierProduit({ handleOpenAdd , fetchProduits , produi
       formDataToSend.append('quantityStock', formData.quantityStock);
       
       // Ajouter l'image existante si aucune nouvelle image n'est sélectionnée
-      if (formData.newImages.length === 0 && formData.existingImage) {
+      if (formData.newImages?.length === 0 && formData.existingImage) {
         formDataToSend.append('existingImage', formData.existingImage);
       }
       
       // Ajouter les nouvelles images
-      formData.newImages.forEach(image => {
+      formData.newImages?.forEach(image => {
         formDataToSend.append('images', image.file);
       });
 
-      const response = await axios.put(`http://localhost:5000/prod/updateProduit/${id}`, formDataToSend, {
+      const response = await axios.put(`http://localhost:5000/prod/updateProduit/${_id}`, formDataToSend, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
@@ -220,7 +220,7 @@ export default function ModifierProduit({ handleOpenAdd , fetchProduits , produi
                 )}
 
                 <Typography variant="small" className="mb-4">
-                {formData.newImages.length > 0 ? 'Nouvelles images sélectionnées' : 'Télécharger de nouvelles images'}
+                {formData.newImages?.length > 0 ? 'Nouvelles images sélectionnées' : 'Télécharger de nouvelles images'}
                 </Typography>
                 <Typography variant="small" className="text-gray-600 mb-4">
                 JPG, PNG ou GIF. Taille max 50MB.
@@ -246,7 +246,7 @@ export default function ModifierProduit({ handleOpenAdd , fetchProduits , produi
                 
                 {/* Aperçu des nouvelles images */}
                 <div className="flex flex-wrap gap-4 mt-4 justify-center">
-                  {formData.newImages.map((image, index) => (
+                  {formData.newImages?.map((image, index) => (
                     <div key={index} className="relative w-24 h-24">
                       <img
                         src={image.preview}

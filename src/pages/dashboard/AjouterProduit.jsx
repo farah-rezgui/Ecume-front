@@ -65,7 +65,7 @@ export default function AjouterProduit({ handleOpen, fetchProduits }) {
     form.append('prix', formData.prix);
     form.append('quantityStock', formData.quantityStock);
     formData.images.forEach((imgObj) => {
-        form.append('images', imgObj.file);
+        form.append('image', imgObj.file);
     });
 
     try {

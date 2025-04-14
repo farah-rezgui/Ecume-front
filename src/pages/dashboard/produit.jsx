@@ -127,7 +127,7 @@ export function Produit() {
                                     </td>
                                     <td className="py-3 px-5 border-b border-blue-gray-50">
                                         {produit.image && (
-                                            <Avatar src={produit.image} alt={produit.titre} size="sm" variant="rounded" />
+                                            <Avatar src={"http://localhost:5000"+produit.image} alt={produit.titre} size="sm" variant="rounded" />
                                         )}
                                     </td>
                                     <td className="py-3 px-5 border-b border-blue-gray-50">

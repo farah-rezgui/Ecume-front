@@ -5,38 +5,54 @@ import {
   CardBody,
   Typography,
   Avatar,
+  Dialog,
+  DialogBody,
+  DialogFooter,
+  Button
 } from "@material-tailwind/react";
+import ModifierUser from './ModifierUser';
 
 export default function User() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [openEdit, setOpenEdit] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
+
+  const handleOpenEdit = (user) => {
+    setSelectedUser(user);
+    setOpenEdit(true);
+  };
+
+  const handleCloseEdit = () => {
+    setOpenEdit(false);
+    setSelectedUser(null);
+  };
+
+  const fetchUsers = async () => {
+    try {
+      const response = await fetch('http://localhost:5000/user/getAllUser');
+      
+      if (!response.ok) {
+        throw new Error(`Erreur HTTP: ${response.status}`);
+      }
+
+      const data = await response.json();
+      
+      if (!data.userList || !Array.isArray(data.userList)) {
+        throw new Error("Format de réponse inattendu");
+      }
+
+      setUsers(data.userList);
+    } catch (err) {
+      console.error("Erreur de récupération:", err);
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const response = await fetch('http://localhost:5000/user/getAllUser');
-        
-        if (!response.ok) {
-          throw new Error(`Erreur HTTP: ${response.status}`);
-        }
-
-        const data = await response.json();
-        
-        // Vérifie que data.userList existe et est un tableau
-        if (!data.userList || !Array.isArray(data.userList)) {
-          throw new Error("Format de réponse inattendu");
-        }
-
-        setUsers(data.userList);
-      } catch (err) {
-        console.error("Erreur de récupération:", err);
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchUsers();
   }, []);
 
@@ -70,7 +86,7 @@ export default function User() {
           <table className="w-full min-w-[640px] table-auto">
             <thead>
               <tr>
-                {["Utilisateur", "Email", "Date de création", "Actions"].map((el) => (
+                {["Utilisateur", "Email", "Rôle", "Statut", "Date de création", "Actions"].map((el) => (
                   <th key={el} className="border-b border-blue-gray-50 py-3 px-5 text-left">
                     <Typography variant="small" className="text-[11px] font-bold uppercase text-blue-gray-400">
                       {el}
@@ -109,13 +125,23 @@ export default function User() {
                     </td>
                     <td className={className}>
                       <Typography className="text-xs font-semibold text-blue-gray-600">
+                        {user.role === 'admin' ? 'Administrateur' : 'Utilisateur'}
+                      </Typography>
+                    </td>
+                    <td className={className}>
+                      <Typography className="text-xs font-semibold text-blue-gray-600">
+                        {user.isActive !== false ? 'Actif' : 'Inactif'}
+                      </Typography>
+                    </td>
+                    <td className={className}>
+                      <Typography className="text-xs font-semibold text-blue-gray-600">
                         {new Date(user.createdAt).toLocaleDateString()}
                       </Typography>
                     </td>
                     <td className={className}>
                       <Typography
-                        as="a"
-                        href="#"
+                        as="button"
+                        onClick={() => handleOpenEdit(user)}
                         className="text-xs font-semibold text-blue-gray-600 hover:text-blue-500"
                       >
                         Modifier
@@ -125,9 +151,27 @@ export default function User() {
                 );
               })}
             </tbody>
-        </table>
+          </table>
         </CardBody>
-    </Card>
+      </Card>
+
+      {/* Dialog pour la modification */}
+      <Dialog open={openEdit} handler={handleCloseEdit}>
+        <DialogBody>
+          {selectedUser && (
+            <ModifierUser 
+              user={selectedUser} 
+              handleOpenAdd={handleCloseEdit} 
+              fetchUsers={fetchUsers} 
+            />
+          )}
+        </DialogBody>
+        <DialogFooter>
+          <Button variant="text" color="red" onClick={handleCloseEdit} className="mr-1">
+            <span>Fermer</span>
+          </Button>
+        </DialogFooter>
+      </Dialog>
     </div>
-);
+  );
 }

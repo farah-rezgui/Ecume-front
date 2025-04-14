@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect ,useRef } from 'react';
 import {
 Card,
   CardHeader,
@@ -7,12 +7,17 @@ Card,
   Input,
   Textarea,
   Button,
-  Alert
+  Alert ,
 } from "@material-tailwind/react";
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 
+
 export default function ModifierProduit({ handleOpenAdd , fetchProduits , produit }) {
+  const fileInputRef = useRef(null);
+  const handleButtonClick = () => {
+    fileInputRef.current.click();
+    };
   const { _id } = produit;
   console.log(produit);
   const [formData, setFormData] = useState({
@@ -232,6 +237,7 @@ export default function ModifierProduit({ handleOpenAdd , fetchProduits , produi
                   accept="image/jpeg,image/png,image/gif"
                   onChange={handleImageUpload}
                   className="hidden"
+                  ref={fileInputRef}
                 />
                 <label htmlFor="image-upload">
                   <Button
@@ -239,6 +245,7 @@ export default function ModifierProduit({ handleOpenAdd , fetchProduits , produi
                     color="gray"
                     size="sm"
                     className="cursor-pointer"
+                    onClick={handleButtonClick}
                   >
                     Sélectionner des fichiers
                   </Button>

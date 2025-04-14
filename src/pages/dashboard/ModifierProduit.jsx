@@ -19,12 +19,12 @@ export default function ModifierProduit({ handleOpenAdd , fetchProduits , produi
     fileInputRef.current.click();
     };
   const { _id } = produit;
-  console.log(produit);
+  //console.log(produit);
   const [formData, setFormData] = useState({
     titre: '',
     description: '',
     prix: '',
-    quantityStock: 1,
+    quantityStock: '',
     existingImage: '',
     newImages: []
   });
@@ -65,7 +65,7 @@ export default function ModifierProduit({ handleOpenAdd , fetchProduits , produi
       }));
       setFormData(prev => ({
         ...prev,
-        newImages: [...prev.newImages, ...newImages]
+        newImages: [...(prev.newImages || []), ...newImages]
       }));
     }
   };

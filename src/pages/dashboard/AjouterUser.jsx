@@ -14,7 +14,7 @@ import {
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-export default function AjouterUser({ handleOpen, fetchUsers }) {
+export default function AjouterUser({ handleOpen, fetchUsers , changed}) {
   const [formData, setFormData] = useState({
     username: '',
     email: '',
@@ -52,13 +52,10 @@ export default function AjouterUser({ handleOpen, fetchUsers }) {
     try {
       const response = await axios.post('http://localhost:5000/user/addUser', formData);
       
-      if (response.status === 201) {
+      if (response.status === 200) {
         setSuccess(true);
-        if (typeof fetchUsers === "function") fetchUsers();
-        setTimeout(() => {
-          if (handleOpen) handleOpen();
-          navigate('/dashboard/user');
-        }, 1500);
+          handleOpen();
+          changed();
       }
     } catch (err) {
       setError(err.response?.data?.message || 'Erreur lors de l\'ajout de l\'utilisateur');

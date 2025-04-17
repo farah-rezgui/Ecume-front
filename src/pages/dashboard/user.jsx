@@ -23,7 +23,10 @@ export default function User() {
   const [openDelete, setOpenDelete] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [userToDelete, setUserToDelete] = useState(null);
+  const[change,setChange]=useState(false);
 
+  const handleChange = ()=> setChange(!change);
+  
   const handleOpenAdd = () => setOpenAdd(!openAdd);
   const handleOpenEdit = (user) => {
     setSelectedUser(user);
@@ -84,7 +87,7 @@ export default function User() {
 
   useEffect(() => {
     fetchUsers();
-  }, []);
+  }, [change]);
 
   if (loading) {
     return (
@@ -110,7 +113,8 @@ export default function User() {
       <Dialog open={openAdd} handler={handleCloseAdd} size="sm">
         <DialogHeader>Ajouter un nouvel utilisateur</DialogHeader>
         <DialogBody>
-          <AjouterUser handleOpen={handleCloseAdd} fetchUsers={fetchUsers} />
+          <AjouterUser handleOpen={handleCloseAdd} fetchUsers={fetchUsers}
+          changed={handleChange}  />
         </DialogBody>
       </Dialog>
 

@@ -13,7 +13,7 @@ import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 
 
-export default function ModifierProduit({ handleOpenAdd , fetchProduits , produit }) {
+export default function ModifierProduit({ handleOpenAdd , fetchProduits , produit ,changed }) {
   const fileInputRef = useRef(null);
   const handleButtonClick = () => {
     fileInputRef.current.click();
@@ -99,17 +99,10 @@ export default function ModifierProduit({ handleOpenAdd , fetchProduits , produi
       formDataToSend.append('description', formData.description);
       formDataToSend.append('prix', formData.prix);
       formDataToSend.append('quantityStock', formData.quantityStock);
-      
-      // Ajouter l'image existante si aucune nouvelle image n'est sélectionnée
-      if (formData.newImages?.length === 0 && formData.existingImage) {
-        formDataToSend.append('existingImage', formData.existingImage);
-      }
-      
-      // Ajouter les nouvelles images
       formData.newImages?.forEach(image => {
-        formDataToSend.append('images', image.file);
+        formDataToSend.append('newImages', image.file); // Note the field name must match backend expectation
       });
-
+  
       const response = await axios.put(`http://localhost:5000/prod/updateProduit/${_id}`, formDataToSend, {
         headers: {
           'Content-Type': 'multipart/form-data'
@@ -120,8 +113,9 @@ export default function ModifierProduit({ handleOpenAdd , fetchProduits , produi
         setSuccess(true);
         handleOpenAdd();
         setTimeout(() => navigate('/dashboard/produit'), 1500);
+        changed();
       }
-    } catch (err) {
+    }catch (err) {
       setError(err.response?.data?.message || 'Erreur lors de la modification du produit');
     } finally {
       setLoading(false);

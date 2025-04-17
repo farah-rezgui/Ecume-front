@@ -19,6 +19,7 @@ import { useNavigate } from "react-router-dom";
 export function Produit() {
     const [produits, setProduits] = useState([]);
     const [openAdd, setOpenAdd] = useState(false);
+    const[change,setChange]=useState(false);
     const [openEdit, setOpenEdit] = useState(false);
     const [selectedProduit, setSelectedProduit] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -31,6 +32,7 @@ export function Produit() {
     setSelectedProduit(produit);
     setOpenEdit(!openEdit);
     };
+    const handleChange = ()=>setChange(!change);
 
     const handleCloseEdit = () => {
     setOpenEdit(false);
@@ -62,7 +64,9 @@ export function Produit() {
 
     useEffect(() => {
     fetchProduits();
-    }, []);
+
+    }, [change]);
+    
 
     if (loading) return <div>Chargement en cours...</div>;
     if (error) return <div>Erreur: {error}</div>;
@@ -86,7 +90,7 @@ export function Produit() {
                 handleOpenAdd={handleCloseEdit} 
                 produit={selectedProduit} 
                 fetchProduits={fetchProduits} 
-            />
+                changed={handleChange}            />
             )}
         </DialogBody>
         </Dialog>
@@ -161,7 +165,8 @@ export function Produit() {
                         variant="text"
                         color="blue"
                         size="sm"
-                        onClick={() => handleOpenEdit(produit)}
+                        onClick={() => handleOpenEdit(produit) }
+
                         >
                         Modifier
                         </Button>

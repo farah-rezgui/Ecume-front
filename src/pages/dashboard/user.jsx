@@ -8,25 +8,36 @@ import {
   Dialog,
   DialogBody,
   DialogFooter,
-  Button
+  Button,
+  DialogHeader
 } from "@material-tailwind/react";
 import ModifierUser from './ModifierUser';
+import AjouterUser from './AjouterUser';
 
 export default function User() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [openEdit, setOpenEdit] = useState(false);
+  const [openAdd, setOpenAdd] = useState(false);
+  const [openDelete, setOpenDelete] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
+  const [userToDelete, setUserToDelete] = useState(null);
 
+  const handleOpenAdd = () => setOpenAdd(!openAdd);
   const handleOpenEdit = (user) => {
     setSelectedUser(user);
     setOpenEdit(true);
   };
-
-  const handleCloseEdit = () => {
-    setOpenEdit(false);
-    setSelectedUser(null);
+  const handleCloseEdit = () => setOpenEdit(false);
+  const handleCloseAdd = () => setOpenAdd(false);
+  const handleOpenDelete = (user) => {
+    setUserToDelete(user);
+    setOpenDelete(true);
+  };
+  const handleCloseDelete = () => {
+    setOpenDelete(false);
+    setUserToDelete(null);
   };
 
   const fetchUsers = async () => {
@@ -49,6 +60,25 @@ export default function User() {
       setError(err.message);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleDeleteUser = async () => {
+    try {
+      const response = await fetch(`http://localhost:5000/user/deleteUser/${userToDelete._id}`, {
+        method: 'DELETE',
+      });
+      
+      if (!response.ok) {
+        throw new Error(`Erreur HTTP: ${response.status}`);
+      }
+
+      await response.json();
+      fetchUsers(); // Rafraîchir la liste des utilisateurs
+      handleCloseDelete(); // Fermer le dialogue de confirmation
+    } catch (err) {
+      console.error("Erreur lors de la suppression:", err);
+      setError(err.message);
     }
   };
 
@@ -76,11 +106,63 @@ export default function User() {
 
   return (
     <div className="mt-12 mb-8 flex flex-col gap-12">
+      {/* Dialogue pour ajouter un utilisateur */}
+      <Dialog open={openAdd} handler={handleCloseAdd} size="sm">
+        <DialogHeader>Ajouter un nouvel utilisateur</DialogHeader>
+        <DialogBody>
+          <AjouterUser handleOpen={handleCloseAdd} fetchUsers={fetchUsers} />
+        </DialogBody>
+      </Dialog>
+
+      {/* Dialogue pour modifier un utilisateur */}
+      <Dialog open={openEdit} handler={handleCloseEdit} size="sm">
+        <DialogHeader>Modifier l'utilisateur</DialogHeader>
+        <DialogBody>
+          {selectedUser && (
+            <ModifierUser 
+              user={selectedUser} 
+              handleOpenAdd={handleCloseEdit} 
+              fetchUsers={fetchUsers} 
+            />
+          )}
+        </DialogBody>
+      </Dialog>
+
+      {/* Dialogue de confirmation pour la suppression */}
+      <Dialog open={openDelete} handler={handleCloseDelete} size="sm">
+        <DialogHeader>Confirmer la suppression</DialogHeader>
+        <DialogBody>
+          <Typography variant="paragraph">
+            Êtes-vous sûr de vouloir supprimer l'utilisateur {userToDelete?.username} ?
+          </Typography>
+        </DialogBody>
+        <DialogFooter>
+          <Button
+            variant="text"
+            color="red"
+            onClick={handleCloseDelete}
+            className="mr-1"
+          >
+            <span>Annuler</span>
+          </Button>
+          <Button variant="gradient" color="green" onClick={handleDeleteUser}>
+            <span>Confirmer</span>
+          </Button>
+        </DialogFooter>
+      </Dialog>
+
       <Card>
-        <CardHeader variant="gradient" color="gray" className="mb-8 p-6">
+        <CardHeader variant="gradient" color="gray" className="mb-8 p-6 flex justify-between items-center">
           <Typography variant="h6" color="white">
             Liste des Utilisateurs ({users.length})
           </Typography>
+          <Button 
+            color="white" 
+            size="sm"
+            onClick={handleOpenAdd}
+          >
+            Ajouter un utilisateur
+          </Button>
         </CardHeader>
         <CardBody className="overflow-x-scroll px-0 pt-0 pb-2">
           <table className="w-full min-w-[640px] table-auto">
@@ -139,13 +221,22 @@ export default function User() {
                       </Typography>
                     </td>
                     <td className={className}>
-                      <Typography
-                        as="button"
-                        onClick={() => handleOpenEdit(user)}
-                        className="text-xs font-semibold text-blue-gray-600 hover:text-blue-500"
-                      >
-                        Modifier
-                      </Typography>
+                      <div className="flex gap-2">
+                        <Typography
+                          as="button"
+                          onClick={() => handleOpenEdit(user)}
+                          className="text-xs font-semibold text-blue-gray-600 hover:text-blue-500"
+                        >
+                          Modifier
+                        </Typography>
+                        <Typography
+                          as="button"
+                          onClick={() => handleOpenDelete(user)}
+                          className="text-xs font-semibold text-red-600 hover:text-red-800"
+                        >
+                          Supprimer
+                        </Typography>
+                      </div>
                     </td>
                   </tr>
                 );
@@ -154,24 +245,6 @@ export default function User() {
           </table>
         </CardBody>
       </Card>
-
-      {/* Dialog pour la modification */}
-      <Dialog open={openEdit} handler={handleCloseEdit}>
-        <DialogBody>
-          {selectedUser && (
-            <ModifierUser 
-              user={selectedUser} 
-              handleOpenAdd={handleCloseEdit} 
-              fetchUsers={fetchUsers} 
-            />
-          )}
-        </DialogBody>
-        <DialogFooter>
-          <Button variant="text" color="red" onClick={handleCloseEdit} className="mr-1">
-            <span>Fermer</span>
-          </Button>
-        </DialogFooter>
-      </Dialog>
     </div>
   );
 }

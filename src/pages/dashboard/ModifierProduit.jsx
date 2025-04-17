@@ -35,7 +35,7 @@ export default function ModifierProduit({ handleOpenAdd , fetchProduits , produi
   const navigate = useNavigate();
 
   // Charger les données du produit à modifier
-  useEffect(() => {
+  /*useEffect(() => {
     const fetchProduit = async () => {
       try {
         const response = await axios.get(`http://localhost:5000/prod/getProduitById/${_id}`);
@@ -54,7 +54,7 @@ export default function ModifierProduit({ handleOpenAdd , fetchProduits , produi
     };
 
     fetchProduit();
-  }, [_id]);
+  }, [_id]);*/
 
   const handleImageUpload = (e) => {
     const files = Array.from(e.target.files);

@@ -23,7 +23,7 @@ export default function AjouterProduit({ handleOpen, fetchProduits }) {
   const [formData, setFormData] = useState({
     titre: '',
     description: '',
-    images:[],
+    image:[],
     prix: '',
     quantityStock: 1
   });
@@ -36,13 +36,13 @@ export default function AjouterProduit({ handleOpen, fetchProduits }) {
   const handleImageUpload = (e) => {
     const files = Array.from(e.target.files);
     if (files.length > 0) {
-      const newImages = files.map(file => ({
+      const newImage = files.map(file => ({
         file,
         preview: URL.createObjectURL(file)
       }));
       setFormData(prev => ({
         ...prev,
-        images: [...prev.images, ...newImages]
+        image: [...prev.image, ...newImage]
       }));
     }
   };
@@ -64,7 +64,7 @@ export default function AjouterProduit({ handleOpen, fetchProduits }) {
     form.append('description', formData.description);
     form.append('prix', formData.prix);
     form.append('quantityStock', formData.quantityStock);
-    formData.images.forEach((imgObj) => {
+    formData.image.forEach((imgObj) => {
         form.append('image', imgObj.file);
     });
 
@@ -74,7 +74,7 @@ export default function AjouterProduit({ handleOpen, fetchProduits }) {
           'Content-Type': 'multipart/form-data',
         },
       });
-      if (response.status === 200) {
+      if (response.status === 201) {
         setSuccess(true);
         handleOpen();
         if (typeof fetchProduits === "function") fetchProduits(); 
@@ -197,7 +197,7 @@ export default function AjouterProduit({ handleOpen, fetchProduits }) {
                 
                 {/* Aperçu des images */}
                 <div className="flex flex-wrap gap-4 mt-4">
-                  {formData.images.map((image, index) => (
+                  {formData.image.map((image, index) => (
                     <div key={index} className="relative w-24 h-24">
                       <img
                         src={image.preview}

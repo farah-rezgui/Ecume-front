@@ -96,8 +96,8 @@ export function Produit() {
         </Dialog>
 
         <Card>
-        <CardHeader variant="gradient" color="gray" className="mb-8 p-6 flex justify-between items-center">
-            <Typography variant="h6" color="white">
+        <CardHeader variant="gradient" color="white" className="mb-8 p-6 flex justify-between items-center">
+            <Typography variant="h6" color="black">
             Liste de produits ({produits.length})
             </Typography>
             <Button 

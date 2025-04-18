@@ -27,7 +27,7 @@ export function Navbar({ brandName, routes, action }) {
           key={name}
           as="li"
           variant="small"
-          color="blue-gray"
+          color="white"
           className="capitalize"
         >
           <Link to={path} className="flex items-center gap-1 p-1 font-normal">
@@ -84,16 +84,6 @@ export function Navbar({ brandName, routes, action }) {
 
 Navbar.defaultProps = {
   brandName: "Ecume ",
-  action: (
-    <a
-      href="https://www.creative-tim.com/product/material-tailwind-dashboard-react"
-      target="_blank"
-    >
-      <Button variant="gradient" size="sm" fullWidth>
-        free download
-      </Button>
-    </a>
-  ),
 };
 
 Navbar.propTypes = {

@@ -216,17 +216,17 @@ export function Commande() {
                         {commande.products?.map((product, index) => (
                           <Typography key={index} className="text-xs font-normal text-blue-gray-500">
                             {product.quantity}x {product.titre || `Produit ${product.productId?.slice(-4) || index+1}`}
-                          </Typography>
+                        </Typography>
                         )) || '-'}
-                      </div>
+                    </div>
                     </td>
                     <td className={className}>
-                      <Typography className="text-xs font-semibold text-blue-gray-600">
+                    <Typography className="text-xs font-semibold text-blue-gray-600">
                         {commande.totalAmount?.toFixed(2) || '0.00'} DT
-                      </Typography>
+                    </Typography>
                     </td>
                     <td className={className}>
-                      <Chip
+                    <Chip
                         variant="gradient"
                         color={
                         commande.status === "pending" ? "amber" : 
@@ -235,33 +235,30 @@ export function Commande() {
                         }
                         value={commande.status || 'inconnu'}
                         className="py-0.5 px-2 text-[11px] font-medium w-fit capitalize"
-                      />
+                    />
                     </td>
                     <td className={className}>
-                      <Typography className="text-xs font-semibold text-blue-gray-600">
+                    <Typography className="text-xs font-semibold text-blue-gray-600">
                         {commande.createdAt ? new Date(commande.createdAt).toLocaleDateString() : '-'}
-                      </Typography>
+                    </Typography>
                     </td>
                     <td className={className}>
-                      <div className="flex gap-2">
+                    <div className="flex gap-2">
                         <button 
-                          onClick={() => openDeleteConfirmation(commande)}
-                          className="p-1 rounded-full hover:bg-red-50 text-red-500"
+                        onClick={() => openDeleteConfirmation(commande)}
+                        className="p-1 rounded-full hover:bg-red-50 text-red-500"
                         >
-                          <TrashIcon className="h-5 w-5" />
+                        <TrashIcon className="h-5 w-5" />
                         </button>
-                        <button className="p-1 rounded-full hover:bg-blue-gray-50">
-                          <EllipsisVerticalIcon className="h-5 w-5 text-blue-gray-400" />
-                        </button>
-                      </div>
+                    </div>
                     </td>
-                  </tr>
+                </tr>
                 );
-              })}
+            })}
             </tbody>
-          </table>
+        </table>
         </CardBody>
-      </Card>
+    </Card>
 
       {/* Dialog de confirmation de suppression */}
       <Dialog open={openDeleteDialog} handler={() => setOpenDeleteDialog(false)}>
